@@ -11,6 +11,7 @@ const configuredToken = import.meta.env.VITE_PAYMENT_TOKEN_ADDRESS as string | u
 
 export const onchainReady = Boolean(configuredFlow && configuredToken && isAddress(configuredFlow) && isAddress(configuredToken))
 export const tokenSymbol = import.meta.env.VITE_TOKEN_SYMBOL || 'dUSDC'
+export const tokenAddress = configuredToken && isAddress(configuredToken) ? configuredToken : undefined
 const monadTestnet = { id: chainId, name: 'Monad Testnet', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: ['https://testnet-rpc.monad.xyz'] } } } as const
 
 const flowAbi = [
@@ -94,4 +95,15 @@ export async function mintDemoTokens() {
   const hash = await client.writeContract({ account, address: configuredToken as Address, abi: tokenAbi, functionName: 'mint', args: [parseUnits('1000', 6)] })
   await waitForReceipt(hash)
   return hash
+}
+
+export async function addDemoTokenToWallet() {
+  if (!tokenAddress) throw new Error('Add your payment token address to .env before adding dUSDC to your wallet.')
+  const wallet = provider()
+  const added = await wallet.request({
+    method: 'wallet_watchAsset',
+    params: { type: 'ERC20', options: { address: tokenAddress, symbol: tokenSymbol, decimals: 6 } },
+  }) as boolean
+  if (!added) throw new Error('Token was not added. You can import it manually in MetaMask using the contract address.')
+  return added
 }
