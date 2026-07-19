@@ -1,5 +1,0 @@
-packages:
-  - "components"
-  - "business"
-  - "prototype"
-  - "lib/api-client-react"
