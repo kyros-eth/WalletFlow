@@ -20,7 +20,10 @@ const flowAbi = [
   { type: 'event', name: 'LinkCreated', inputs: [{ indexed: true, name: 'linkId', type: 'uint256' }, { indexed: true, name: 'owner', type: 'address' }, { indexed: true, name: 'token', type: 'address' }, { indexed: false, name: 'amount', type: 'uint256' }], anonymous: false },
 ] as const
 
-const tokenAbi = [{ type: 'function', name: 'approve', stateMutability: 'nonpayable', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [{ name: '', type: 'bool' }] }] as const
+const tokenAbi = [
+  { type: 'function', name: 'approve', stateMutability: 'nonpayable', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [{ name: '', type: 'bool' }] },
+  { type: 'function', name: 'mint', stateMutability: 'nonpayable', inputs: [{ name: 'amount', type: 'uint256' }], outputs: [] },
+] as const
 
 const provider = () => {
   if (!window.ethereum) throw new Error('Install MetaMask or another browser wallet first.')
@@ -81,6 +84,14 @@ export async function payPaymentLink(linkId: string, amount: string) {
   const approval = await client.writeContract({ account, address: configuredToken as Address, abi: tokenAbi, functionName: 'approve', args: [configuredFlow as Address, value] })
   await waitForReceipt(approval)
   const hash = await client.writeContract({ account, address: configuredFlow as Address, abi: flowAbi, functionName: 'pay', args: [BigInt(linkId)] })
+  await waitForReceipt(hash)
+  return hash
+}
+
+export async function mintDemoTokens() {
+  if (!configuredToken || !isAddress(configuredToken)) throw new Error('Add your payment token address to .env before minting demo tokens.')
+  const { account, client } = await accountAndClient()
+  const hash = await client.writeContract({ account, address: configuredToken as Address, abi: tokenAbi, functionName: 'mint', args: [parseUnits('1000', 6)] })
   await waitForReceipt(hash)
   return hash
 }

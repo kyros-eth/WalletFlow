@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArrowRight, Check, Copy, ExternalLink, AlertTriangle, Plus, ShieldCheck, Sparkles, SplitSquareHorizontal, Wallet } from 'lucide-react'
-import { connectWallet, createPaymentLink, getPaymentLink, onchainReady, payPaymentLink, tokenSymbol } from './onchain'
+import { connectWallet, createPaymentLink, getPaymentLink, mintDemoTokens, onchainReady, payPaymentLink, tokenSymbol } from './onchain'
 import './styles.css'
 
 type Allocation = { label: string; wallet: string; percentage: number; color: string }
@@ -23,6 +23,7 @@ function App() {
   const sharedLinkId = new URLSearchParams(location.search).get('link')
   const [notice, setNotice] = useState(onchainReady ? (sharedLinkId ? 'Connect your wallet to load this payment split.' : '') : 'Demo mode: add your deployed contract addresses to .env to enable live payments.')
   const [busy, setBusy] = useState(false)
+  const [minting, setMinting] = useState(false)
   const total = allocations.reduce((sum, a) => sum + a.percentage, 0)
   const update = (i: number, key: keyof Allocation, value: string | number) => setAllocations(a => a.map((item, index) => index === i ? { ...item, [key]: value } : item))
   const add = () => setAllocations(a => [...a, { label: 'New wallet', wallet: '0x0000...0000', percentage: 0, color: '#ec78b8' }])
@@ -41,6 +42,12 @@ function App() {
   const handleConnect = async () => {
     try { setWalletAddress(await connectWallet()); await loadSharedLink(); if (!sharedLinkId) setNotice('Wallet connected on Monad Testnet.') }
     catch (error) { setNotice(error instanceof Error ? error.message : 'Could not connect wallet.') }
+  }
+  const handleMint = async () => {
+    setMinting(true); setNotice('Confirm the mint transaction in your wallet…')
+    try { await mintDemoTokens(); setNotice('Successfully minted 1,000 dUSDC to your wallet.') }
+    catch (error) { setNotice(error instanceof Error ? error.message : 'Could not mint demo tokens.') }
+    finally { setMinting(false) }
   }
   const handleCreate = async () => {
     setBusy(true); setNotice('Confirm the split-creation transaction in your wallet…')
@@ -61,7 +68,7 @@ function App() {
   const explorerUrl = txHash ? `https://testnet.monadexplorer.com/tx/${txHash}` : ''
 
   return <main>
-    <nav><div className="brand"><div className="mark"><SplitSquareHorizontal size={18}/></div>WalletFlow</div><span className="network"><i/> Monad Testnet</span><button className="connect" onClick={handleConnect}><Wallet size={16}/>{walletAddress ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}` : 'Connect wallet'}</button></nav>
+    <nav><div className="brand"><div className="mark"><SplitSquareHorizontal size={18}/></div>WalletFlow</div><span className="network"><i/> Monad Testnet</span>{onchainReady && <button className="connect" disabled={minting} onClick={handleMint}>{minting ? 'Minting…' : 'Get 1,000 dUSDC'}</button>}<button className="connect" onClick={handleConnect}><Wallet size={16}/>{walletAddress ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}` : 'Connect wallet'}</button></nav>
     <section className="hero"><div><div className="eyebrow"><Sparkles size={14}/> ATOMIC PAYMENT SPLITTER</div><h1>Split one payment.<br/><em>Pay everyone instantly.</em></h1><p>Distribute one payment across multiple wallets in a single atomic transaction on Monad. Built for agencies, startups, and teams who pay more than one person at once.</p><div className="hero-trust"><ShieldCheck size={17}/> Atomic, onchain distribution. No backend required.</div></div><div className="flow-card"><span>ONE PAYMENT</span><strong>{amount} {tokenSymbol}</strong><div className="flow-line"/><span>SPLITS INSTANTLY</span><div className="mini-splits"><b>45%</b><b>20%</b><b>15%</b><b>20%</b></div></div></section>
     <section className="workspace"><div className="builder"><div className="section-heading"><div><span>01 / CREATE</span><h2>Set up your payment split</h2></div><div className={`status ${total === 100 ? '' : total > 100 ? 'over' : 'under'}`}>{total === 100 ? <><Check size={14}/> Ready</> : total > 100 ? <><AlertTriangle size={14}/> {total}% / 100%</> : `${total}% / 100%`}</div></div>{notice && <div className="notice">{notice}</div>}
       <label>What are you getting paid for?<input defaultValue="Website redesign — July milestone"/></label><div className="fields"><label>Amount<div className="input-with-suffix"><input value={amount} onChange={e => setAmount(e.target.value.replace(/[^0-9]/g, ''))}/><b>{tokenSymbol}</b></div></label><label>Network<select defaultValue="monad"><option value="monad">Monad Testnet</option></select></label></div>
