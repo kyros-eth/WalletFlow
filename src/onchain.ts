@@ -1,4 +1,4 @@
-import { createPublicClient, createWalletClient, custom, decodeEventLog, formatUnits, isAddress, parseUnits, type Address } from 'viem'
+import { createPublicClient, createWalletClient, custom, decodeEventLog, formatUnits, getAddress, isAddress, parseUnits, type Address } from 'viem'
 
 declare global {
   interface Window { ethereum?: { request: (args: { method: string; params?: unknown[] }) => Promise<unknown> } }
@@ -11,7 +11,7 @@ const configuredToken = import.meta.env.VITE_PAYMENT_TOKEN_ADDRESS as string | u
 
 export const onchainReady = Boolean(configuredFlow && configuredToken && isAddress(configuredFlow) && isAddress(configuredToken))
 export const tokenSymbol = import.meta.env.VITE_TOKEN_SYMBOL || 'dUSDC'
-export const tokenAddress = configuredToken && isAddress(configuredToken) ? configuredToken : undefined
+export const tokenAddress = configuredToken && isAddress(configuredToken) ? getAddress(configuredToken) : undefined
 const monadTestnet = { id: chainId, name: 'Monad Testnet', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: ['https://testnet-rpc.monad.xyz'] } } } as const
 
 const flowAbi = [
@@ -24,6 +24,7 @@ const flowAbi = [
 const tokenAbi = [
   { type: 'function', name: 'approve', stateMutability: 'nonpayable', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [{ name: '', type: 'bool' }] },
   { type: 'function', name: 'mint', stateMutability: 'nonpayable', inputs: [{ name: 'amount', type: 'uint256' }], outputs: [] },
+  { type: 'function', name: 'balanceOf', stateMutability: 'view', inputs: [{ name: 'account', type: 'address' }], outputs: [{ name: '', type: 'uint256' }] },
 ] as const
 
 const provider = () => {
@@ -90,20 +91,28 @@ export async function payPaymentLink(linkId: string, amount: string) {
 }
 
 export async function mintDemoTokens() {
-  if (!configuredToken || !isAddress(configuredToken)) throw new Error('Add your payment token address to .env before minting demo tokens.')
+  if (!tokenAddress) throw new Error('Add your payment token address to .env before minting demo tokens.')
   const { account, client } = await accountAndClient()
-  const hash = await client.writeContract({ account, address: configuredToken as Address, abi: tokenAbi, functionName: 'mint', args: [parseUnits('1000', 6)] })
+  const hash = await client.writeContract({ account, address: tokenAddress, abi: tokenAbi, functionName: 'mint', args: [parseUnits('1000', 6)] })
   await waitForReceipt(hash)
   return hash
 }
 
+export async function getDemoTokenBalance(account: Address) {
+  if (!tokenAddress) throw new Error('Add your payment token address to .env before reading your dUSDC balance.')
+  const client = createPublicClient({ chain: monadTestnet, transport: custom(provider() as never) })
+  const balance = await client.readContract({ address: tokenAddress, abi: tokenAbi, functionName: 'balanceOf', args: [account] })
+  return formatUnits(balance, 6)
+}
+
 export async function addDemoTokenToWallet() {
   if (!tokenAddress) throw new Error('Add your payment token address to .env before adding dUSDC to your wallet.')
+  await accountAndClient()
   const wallet = provider()
   const added = await wallet.request({
     method: 'wallet_watchAsset',
-    params: { type: 'ERC20', options: { address: tokenAddress, symbol: tokenSymbol, decimals: 6 } },
+    params: ['ERC20', { address: tokenAddress, symbol: tokenSymbol, decimals: 6 }],
   }) as boolean
-  if (!added) throw new Error('Token was not added. You can import it manually in MetaMask using the contract address.')
+  if (!added) throw new Error('Token was not added. Import it manually in MetaMask: Assets → Import tokens → paste the contract address.')
   return added
 }
