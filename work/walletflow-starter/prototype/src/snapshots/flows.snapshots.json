@@ -1,0 +1,88 @@
+{
+  "page": "flows",
+  "snapshots": [
+    {
+      "id": "flows-baseline",
+      "name": "Active Flows",
+      "purpose": "Show the flows grid with multiple active automation cards and distribution strategies.",
+      "priority": "p0",
+      "state": {
+        "flows": [
+          {
+            "id": "f1",
+            "name": "Salary Splitter",
+            "sender": "Main Employer",
+            "senderAddress": "0x123...456",
+            "token": "USDC",
+            "condition": "Incoming > 0",
+            "status": "Active",
+            "splits": [
+              {
+                "walletId": "w1",
+                "percentage": 50
+              },
+              {
+                "walletId": "w2",
+                "percentage": 30
+              },
+              {
+                "walletId": "w3",
+                "percentage": 20
+              }
+            ]
+          },
+          {
+            "id": "f2",
+            "name": "Side Hustle",
+            "sender": "Freelance Client",
+            "senderAddress": "0x789...012",
+            "token": "SOL",
+            "condition": "Incoming > 0",
+            "status": "Active",
+            "splits": [
+              {
+                "walletId": "w1",
+                "percentage": 100
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "flows-paused",
+      "name": "Paused State",
+      "purpose": "Verify visual feedback and color coding when a flow is in the 'Paused' status.",
+      "priority": "p1",
+      "state": {
+        "flows": [
+          {
+            "id": "f1",
+            "name": "Emergency Fund",
+            "sender": "Personal",
+            "senderAddress": "0x321...654",
+            "token": "USDT",
+            "condition": "Always",
+            "status": "Paused",
+            "splits": [
+              {
+                "walletId": "w1",
+                "percentage": 100
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "flows-empty",
+      "name": "Empty State",
+      "purpose": "Show the dashboard with no flows, emphasizing the 'New Automation' placeholder card.",
+      "priority": "p2",
+      "state": {
+        "flows": []
+      }
+    }
+  ],
+  "_zkStateBundleSha256": "5b12784af7fa821616d6a26e07f8e55942a9da9753225c6b871121d882547ac0"
+}

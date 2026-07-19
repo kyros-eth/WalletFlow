@@ -1,0 +1,207 @@
+{
+  "meta": {
+    "name": "WalletFlow Linear Precision",
+    "version": "1.0.0",
+    "platform": "desktop"
+  },
+  "layoutMode": "UTILITY",
+  "colors": {
+    "brand-primary": "hsl(249 93% 70%)",
+    "brand-accent": "hsl(191 100% 76%)",
+    "brand-highlight": "hsl(180 100% 50%)",
+    "surface-base": "hsl(240 6% 4%)",
+    "surface-raised": "hsl(240 6% 9%)",
+    "surface-overlay": "hsl(240 5% 15%)",
+    "surface-glass": "240 6% 4% / 0.8",
+    "text-primary": "hsl(0 0% 98%)",
+    "text-secondary": "hsl(240 5% 65%)",
+    "text-muted": "hsl(240 4% 45%)",
+    "text-on-primary": "hsl(0 0% 100%)",
+    "border-subtle": "hsl(240 5% 15%)",
+    "border-strong": "hsl(240 5% 25%)",
+    "border-active": "hsl(249 93% 70%)",
+    "status-success": "hsl(142 71% 45%)",
+    "status-warning": "hsl(38 92% 50%)",
+    "status-error": "hsl(0 84% 60%)",
+    "status-telemetry": "hsl(191 100% 76%)"
+  },
+  "fontSize": {
+    "caption": [
+      "13px",
+      {
+        "lineHeight": "1.4",
+        "letterSpacing": "0.01em"
+      }
+    ],
+    "body": [
+      "16px",
+      {
+        "lineHeight": "1.6",
+        "letterSpacing": "0"
+      }
+    ],
+    "body-lg": [
+      "20px",
+      {
+        "lineHeight": "1.5",
+        "letterSpacing": "-0.01em"
+      }
+    ],
+    "h3": [
+      "25px",
+      {
+        "lineHeight": "1.3",
+        "letterSpacing": "-0.015em",
+        "fontWeight": "600"
+      }
+    ],
+    "h2": [
+      "31px",
+      {
+        "lineHeight": "1.25",
+        "letterSpacing": "-0.02em",
+        "fontWeight": "600"
+      }
+    ],
+    "h1": [
+      "39px",
+      {
+        "lineHeight": "1.2",
+        "letterSpacing": "-0.025em",
+        "fontWeight": "700"
+      }
+    ],
+    "display": [
+      "61px",
+      {
+        "lineHeight": "1.1",
+        "letterSpacing": "-0.03em",
+        "fontWeight": "700"
+      }
+    ]
+  },
+  "fontFamily": {
+    "display": [
+      "Geist",
+      "ui-sans-serif",
+      "system-ui",
+      "sans-serif"
+    ],
+    "body": [
+      "Geist",
+      "ui-sans-serif",
+      "system-ui",
+      "sans-serif"
+    ],
+    "mono": [
+      "Geist Mono",
+      "ui-monospace",
+      "SFMono-Regular",
+      "Menlo",
+      "monospace"
+    ]
+  },
+  "spacing": {
+    "micro": "4px",
+    "tight": "8px",
+    "snug": "12px",
+    "base": "16px",
+    "comfortable": "24px",
+    "loose": "32px",
+    "section": "64px",
+    "section-y": "96px",
+    "macro": "128px",
+    "stack-sm": "16px",
+    "stack-md": "32px",
+    "stack-lg": "48px"
+  },
+  "borderRadius": {
+    "none": "0",
+    "sm": "4px",
+    "base": "8px",
+    "card": "12px",
+    "lg": "16px",
+    "full": "9999px"
+  },
+  "boxShadow": {
+    "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.4)",
+    "base": "0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.4)",
+    "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.5)"
+  },
+  "hero": {
+    "tier": "A",
+    "rationale": "High-precision B2B crypto SaaS requires a restraint-coded editorial approach that centers the value prop without stock-imagery noise.",
+    "primary_action": "Create Your First Flow",
+    "secondary_action": "Watch Demo",
+    "asset_spec": null,
+    "composition": "left-rag display headline, link-style primary action, micro-grain background texture",
+    "anti_pattern_check": [
+      "centered-stack-button: PASS",
+      "two-equal-CTAs: PASS",
+      "stock-vector-laptop: PASS",
+      "ai-decorative-imagery: PASS"
+    ]
+  },
+  "_type_scale_ratio": {
+    "ratio": 1.25,
+    "ratio_name": "Major Third",
+    "body_px": 16,
+    "steps": {
+      "caption": -1,
+      "body": 0,
+      "body-lg": 1,
+      "h3": 2,
+      "h2": 3,
+      "h1": 4,
+      "display": 6
+    },
+    "rounded_px": {
+      "caption": 13,
+      "body": 16,
+      "body-lg": 20,
+      "h3": 25,
+      "h2": 31,
+      "h1": 39,
+      "display": 61
+    },
+    "notes": "Geist typeface handles tight tracking at display sizes with high precision."
+  },
+  "_spacing_rhythm": {
+    "base_px": 8,
+    "allowed_multipliers": [
+      0.5,
+      1,
+      1.5,
+      2,
+      3,
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "tokens": {
+      "spacing-micro": 4,
+      "spacing-tight": 8,
+      "spacing-snug": 12,
+      "spacing-base": 16,
+      "spacing-comfortable": 24,
+      "spacing-loose": 32,
+      "spacing-section": 64,
+      "spacing-section-y": 96,
+      "spacing-macro": 128
+    }
+  },
+  "_pre_emit_scores": {
+    "P": 5,
+    "H": 5,
+    "E": 5,
+    "S": 5,
+    "R": 5,
+    "V": 5,
+    "R_prime": 5,
+    "mean": 5,
+    "attempts": 1,
+    "notes": "Zinc charcoal + Monad purple core. No purple-tinted darks. All tokens on rhythm."
+  }
+}

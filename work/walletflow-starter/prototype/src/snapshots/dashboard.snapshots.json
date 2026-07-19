@@ -1,0 +1,59 @@
+{
+  "page": "dashboard",
+  "snapshots": [
+    {
+      "id": "dashboard-baseline",
+      "name": "Default Dashboard",
+      "purpose": "Verify the standard dashboard layout with pre-populated metrics and history items.",
+      "priority": "p0",
+      "state": {
+        "stats": {
+          "totalRouted": "48,250",
+          "paymentsAutomated": "1,240",
+          "successfulExecutions": "1,238",
+          "activeFlows": "12",
+          "executionRate": "99.8%"
+        },
+        "history": [
+          {
+            "id": "tx-1",
+            "sender": "0x71C...4e8",
+            "amount": 2500,
+            "token": "USDC",
+            "flow": "Payroll-Alpha",
+            "hash": "0x123",
+            "timestamp": "2 mins ago",
+            "status": "Completed",
+            "distributions": [
+              {
+                "to": "Engineering",
+                "amount": 1500
+              },
+              {
+                "to": "Operations",
+                "amount": 1000
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "dashboard-empty",
+      "name": "Empty State",
+      "purpose": "Check the UI appearance when no stats or history items are available (new account).",
+      "priority": "p1",
+      "state": {
+        "stats": {
+          "totalRouted": "0",
+          "paymentsAutomated": "0",
+          "successfulExecutions": "0",
+          "activeFlows": "0",
+          "executionRate": "0%"
+        },
+        "history": []
+      }
+    }
+  ],
+  "_zkStateBundleSha256": "d2788185d465b6269e791d82a76f68354ad6f775b71d8472f29ea99dce3d3648"
+}
